@@ -14,8 +14,9 @@ class Perceptron{
 		double lr;
 		vector<double> weights;
 		vector<double> traningSet;
+		vector<double> inputs;
 
-		Perceptron(int bias=1, double=0.1,vector<int>&weights){
+		Perceptron(int bias, double lr,vector<int>&weights){
 
 			this.bias = bias;
 			this.lr = lr;
@@ -41,14 +42,22 @@ class Perceptron{
 		}
 
 
-		double dt(double actualval, double target, double intputval, double lr=this.lr){
+		double dt(double actualval, bool target, double intputval, double lr=this.lr){
 			double err = target - actualval;
 			return err * lr * inputval;
 		}
 
 
-		void adjustWeights(vector<double> inputs, vector<double> targets){
+		void adjustWeights(vector<double> inputs, bool target){
 
+			bool actual = this.evalutate(inputs);
+			if(actual == target) return true;
+
+				
+			for(int i=0; i<this.weights.size(); i++){
+
+				this.weights[i] += this.dt(actual, target, inputs[i]);
+			}
 
 
 		}
