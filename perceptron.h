@@ -1,3 +1,6 @@
+#ifndef PERCEPTRON_H
+#define PERCEPTRON_H
+
 #include <iostream>
 #include <vector>
 #include <random>
@@ -10,17 +13,18 @@ class Perceptron{
 
 
 	public:
+
 		int bias;
 		double lr;
 		vector<double> weights;
 		vector<double> traningSet;
 		vector<double> inputs;
 
-		Perceptron(int bias, double lr,vector<int>&weights){
+		Perceptron(int bias, double lr,vector<double>&weights){
 
-			this.bias = bias;
-			this.lr = lr;
-			this.weights.assign(weights.begin(), weights.end());
+			this->bias = bias;
+			this->lr = lr;
+			this->weights.assign(weights.begin(), weights.end());
 		}
 
 
@@ -34,15 +38,16 @@ class Perceptron{
 			auto gen = [&dist, &mersenne_engine](){return dist(mersenne_engine);};
 			
 	
-			vector<int> weights(inputs.size(), 0);
+			vector<double> weights(inputs.size(), 0);
 			generate(begin(weights), end(weights), gen);
-			this.weights = weights;
+			this->weights.assign(weights.begin(), weights.end());
+			//this->weights = weights;
 
 
 		}
 
 
-		double dt(double actualval, bool target, double intputval, double lr=this.lr){
+		double dt(double actualval, bool target, double inputval, double lr){
 			double err = target - actualval;
 			return err * lr * inputval;
 		}
@@ -50,13 +55,13 @@ class Perceptron{
 
 		void adjustWeights(vector<double> inputs, bool target){
 
-			bool actual = this.evalutate(inputs);
-			if(actual == target) return true;
+			bool actual = this->evalutate(inputs);
+			if(actual == target) return;
 
 				
-			for(int i=0; i<this.weights.size(); i++){
+			for(int i=0; i<this->weights.size(); i++){
 
-				this.weights[i] += this.dt(actual, target, inputs[i]);
+				this->weights[i] += this->dt(actual, target, inputs[i], this->lr);
 			}
 
 
@@ -65,8 +70,8 @@ class Perceptron{
 		double weightedSum(){
 
 			double sum = 0;
-			for(int i=0; i<this.inputs.size(); i++){
-				sum += this.inputs[i]*this.weights;
+			for(int i=0; i<this->inputs.size(); i++){
+				sum += this->inputs[i]*this->weights[i];
 			}
 			return sum;
 
@@ -74,10 +79,13 @@ class Perceptron{
 		}
 
 		bool evalutate(vector<double> inputs){
-			return this.activate(this.weightedSum());
+			return this->activate(this->weightedSum());
 		}
 
 		bool activate(double value){
 			return value >= 0 ? 1:0;
 		}
 		
+};
+
+#endif
