@@ -3,7 +3,7 @@
 
 Implementation of simplest neuron i.e Rosenblatt Perceptron Model. Following codebase will demonstrate a perceptron of learning basic <strong>logic gates e.g AND , OR, NAND and a simple personality classifier on the bases of height and weight.
 
-### Please read any of the examples and then dig into perceptron.cpp.
+### Please read any of the examples and then dig into perceptron.h.
 
 ## Usage
 ```
