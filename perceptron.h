@@ -14,36 +14,49 @@ class Perceptron{
 
 	public:
 
-		int bias;
-		double lr;
+		double lr; //learning rate
 		vector<double> weights;
-		vector<double> traningSet;
-		vector<double> inputs;
 
-		Perceptron(int bias, double lr,vector<double>&weights){
+		Perceptron(int inputsize, double lr=0.5){
+			this->lr = lr;
+			this->init(inputsize);
+		}
 
-			this->bias = bias;
+		Perceptron(double lr,vector<double>&weights){
+
+			//this->bias = bias;
 			this->lr = lr;
 			this->weights.assign(weights.begin(), weights.end());
 		}
 
+		//Print perceptron weights for debugging.
+		void printWeights(){
 
-		void init(vector<double> inputs){
+			for(auto weight: this->weights){
+				cout<<weight<<",";
+			}
+
+			cout<<endl;
+		}
+
+
+		void init(int size){
 			
 			// First create an instance of an engine.
-	    		random_device rnd_device;
+	    	random_device rnd_device;
 			// Specify the engine and distribution.
 			mt19937 mersenne_engine {rnd_device()};  // Generates random integers
 			uniform_int_distribution<int> dist {1, 52};
 			auto gen = [&dist, &mersenne_engine](){return dist(mersenne_engine);};
 			
 	
-			vector<double> weights(inputs.size(), 0);
+			vector<double> weights(size+1, 0);
 			generate(begin(weights), end(weights), gen);
 			this->weights.assign(weights.begin(), weights.end());
+			//adding bias
+			this->weights[this->weights.size()-1] = 1;
+
 			//this->weights = weights;
-
-
 		}
 
 
@@ -53,10 +66,12 @@ class Perceptron{
 		}
 
 
-		void adjustWeights(vector<double> inputs, bool target){
+		bool train(vector<double> inputs, bool target){
+
+			inputs.push_back(1);//adding bias
 
 			bool actual = this->evalutate(inputs);
-			if(actual == target) return;
+			if(actual == target) return true;
 
 				
 			for(int i=0; i<this->weights.size(); i++){
@@ -64,14 +79,41 @@ class Perceptron{
 				this->weights[i] += this->dt(actual, target, inputs[i], this->lr);
 			}
 
+			return false;
+		}
+
+		void traintilllearn(vector<pair<vector<double>, bool>> traningset){
+
+			bool didlearn = false;
+			while(!didlearn){
+
+				didlearn = true;
+
+				for(auto unit: traningset){
+					if(!train(unit.first, unit.second)){
+						didlearn = false;
+					}
+				}
+				
+			}
+			return;
 
 		}
 
-		double weightedSum(){
+
+
+		bool predict(vector<double> inputs){
+
+			//push bias
+			inputs.push_back(1);
+			return this->evalutate(inputs);
+		}
+
+		double weightedSum(vector<double> inputs){
 
 			double sum = 0;
-			for(int i=0; i<this->inputs.size(); i++){
-				sum += this->inputs[i]*this->weights[i];
+			for(int i=0; i<inputs.size(); i++){
+				sum += inputs[i]*this->weights[i];
 			}
 			return sum;
 
@@ -79,7 +121,7 @@ class Perceptron{
 		}
 
 		bool evalutate(vector<double> inputs){
-			return this->activate(this->weightedSum());
+			return this->activate(this->weightedSum(inputs));
 		}
 
 		bool activate(double value){
