@@ -1,3 +1,9 @@
+/*
+	Author: flouthoc (flouthoc@gmail.com)
+	Contributors: 
+*/
+
+
 #include <iostream>
 #include <vector>
 #include "perceptron.h"

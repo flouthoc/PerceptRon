@@ -1,3 +1,8 @@
+/*
+	Author: flouthoc (flouthoc@gmail.com)
+	Contributors: 
+*/
+
 #ifndef PERCEPTRON_H
 #define PERCEPTRON_H
 
