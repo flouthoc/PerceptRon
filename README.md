@@ -1,7 +1,7 @@
 # Neural Network01: PerceptRon
 
 
-Implementation of simplest neuron i.e Rosenblatt Perceptron Model. Following codebase will demonstrate a perceptron of learning basic <strong>logic gates e.g AND , OR, NAND and a simple personality classifier on the bases of height and weight.
+Implementation of simplest neuron i.e Rosenblatt Perceptron Model. Following codebase will demonstrate a perceptron of learning basic <strong>logic gates e.g AND , OR, NAND and a simple personality classifier on the bases of height and weight.</strong>
 
 ### Please read any of the examples and then dig into perceptron.h.
 
